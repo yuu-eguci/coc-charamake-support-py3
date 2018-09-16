@@ -4,13 +4,6 @@
 
 tkinterを使ってるのでpython3専用。
 CoC TRPG キャラメイク用ツール。
-
-========================================
-バージョン1.0(2015-07-12)
-    完成。
-バージョン1.1(2017-09-16)
-    久々に開いてdocとか書いた。当時の総大成。
-    昔を懐かしむ意味もこめてリファクタリングはしない。
 '''
 
 import tkinter as Tk
@@ -729,6 +722,7 @@ class GCCS(Tk.Frame):
                 print('type:' + str(type(e)))
             self.after(500, entry_check)
         entry_check()
+
 
 if __name__ == '__main__':
     gccs = GCCS()
