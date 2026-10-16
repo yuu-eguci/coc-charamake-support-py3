@@ -167,27 +167,33 @@ SKILL_CATEGORIES = {
 SKILL_HEADERS = ("     技能名     ", "初期値", "職業P", "興味P", "合計")
 
 
+MINI_DICE_MAX_COUNT = 1000
+
+
 def dice_roll(count, sides, bonus=0):
     """countDsides + bonus の結果を返します。"""
     return sum(random.randint(1, sides) for _ in range(count)) + bonus
 
 
+# STR + SIZ の上限と、そのときのダメージボーナスです。 56 を超えると 16 ごとに +1D6 増えます。
+DAMAGE_BONUS_TABLE = (
+    (12, "-1D6"),
+    (16, "-1D4"),
+    (24, "0"),
+    (32, "+1D4"),
+    (40, "+1D6"),
+    (56, "+2D6"),
+)
+
+
 def damage_bonus(strs, siz):
-    x = strs + siz
-    if 1 < x < 13:
-        return "-1D6"
-    elif 12 < x < 17:
-        return "-1D4"
-    elif 16 < x < 25:
-        return "0"
-    elif 24 < x < 33:
-        return "+1D4"
-    elif 32 < x < 41:
-        return "+1D6"
-    elif 40 < x < 57:
-        return "+2D6"
-    else:
-        return "+3D6"
+    total = strs + siz
+    if total < 2:  # まだ能力値を決めていないとき
+        return "---"
+    for upper, bonus in DAMAGE_BONUS_TABLE:
+        if total <= upper:
+            return bonus
+    return f"+{(total - 57) // 16 + 3}D6"
 
 
 class DecimalIntVar(tk.IntVar):
@@ -302,6 +308,9 @@ class GCCS(tk.Frame):
             text="OUTPUT\n作成したデータをテキストに出力する",
             height=4,
         ).pack()
+        # 長いファイル名でも左の列の幅が変わらないよう折り返します。
+        self.output_message = tk.Label(button2_frame, wraplength=250)
+        self.output_message.pack()
 
     def build_status(self, main_frame):
         """能力値、派生値、職業ポイントと興味ポイントの欄を作ります。"""
@@ -377,11 +386,19 @@ class GCCS(tk.Frame):
     def roll_status(self):
         for name, dice in STATUS_DICE.items():
             self.status[name].set(dice_roll(*dice))
-        self.recalculate()
+        self.recalculate_if_possible()
 
     def roll_mini_dice(self, event):
-        count, sides, bonus = (variable.get() for variable in self.mini_dice)
-        self.mini_dice_result.set(f"result: {dice_roll(count, sides, bonus)}")
+        try:
+            count, sides, bonus = (variable.get() for variable in self.mini_dice)
+            # 個数が多すぎると画面が固まるので上限を設けます。
+            if not (0 <= count <= MINI_DICE_MAX_COUNT and sides >= 1):
+                raise ValueError
+            # 桁数が大きすぎる数は文字列にするときに ValueError になります。
+            result = f"result: {dice_roll(count, sides, bonus)}"
+        except ValueError:
+            result = "result: 入力エラー"
+        self.mini_dice_result.set(result)
 
     def recalculate(self):
         con, siz, pow_, dex, int_, edu = (
@@ -404,10 +421,13 @@ class GCCS(tk.Frame):
         for row in rows:
             row.recalculate()
 
-    def recalculate_periodically(self):
-        # 入力途中で欄が空や数字以外のときは、次の周期で計算し直します。
-        with contextlib.suppress(tk.TclError, ValueError, OverflowError):
+    def recalculate_if_possible(self):
+        # 入力途中で欄が空や数字以外のときは計算しません (次の周期で計算し直します)。
+        with contextlib.suppress(ValueError):
             self.recalculate()
+
+    def recalculate_periodically(self):
+        self.recalculate_if_possible()
         self.after(500, self.recalculate_periodically)
 
     def sheet_text(self):
@@ -440,9 +460,27 @@ class GCCS(tk.Frame):
         return text + "\n"
 
     def output(self):
-        text = self.sheet_text()
-        with open(self.output_name.get() + ".txt", "a") as w:
-            w.write(text)
+        name = self.output_name.get().strip()
+        if not name or any(c in name for c in "/\\\0"):
+            self.show_output_message("ファイル名を入れてね (/ と \\ は使えないよ)", error=True)
+            return
+        try:
+            self.recalculate()
+            text = self.sheet_text()
+        except ValueError:
+            self.show_output_message("数字の欄に数字以外が入っているよ", error=True)
+            return
+        try:
+            with open(f"{name}.txt", "a", encoding="utf-8") as w:
+                w.write(text)
+        except OSError as e:
+            self.show_output_message(f"書き出せなかったよ: {e.strerror}", error=True)
+            return
+        shown = name if len(name) <= 24 else name[:23] + "…"
+        self.show_output_message(f"{shown}.txt に書き出したよ")
+
+    def show_output_message(self, text, error=False):
+        self.output_message.config(text=text, fg="red" if error else "black")
 
 
 if __name__ == "__main__":

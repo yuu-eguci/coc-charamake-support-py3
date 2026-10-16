@@ -24,7 +24,9 @@ docker compose up --build
 - 日本語は直接は打てない (noVNC が IME に対応していないため)
     - noVNC の左端のメニュー → クリップボードに日本語を貼ってから、アプリの入力欄で `Ctrl+V` すると入る
 - OUTPUT ボタンで書き出したテキストは `./output/<出力ファイル名>.txt` に出る
+    - 書き出したファイル名はボタンの下に出る
     - 同じ名前で何回か OUTPUT すると、同じファイルに追記されていく
+    - 数字の欄に数字以外が入っているときや、ファイル名が空・ `/` や `\` 入りのときは書き出さずに、ボタンの下に理由を出す
     - Linux で uid が 1000 以外なら `APP_UID=$(id -u) APP_GID=$(id -g) docker compose up --build` で起動すると書き込める
 - 止めるときは `Ctrl+C` (または `docker compose down`)
 
@@ -36,7 +38,7 @@ docker compose run --rm dev ruff check .
 docker compose run --rm dev ruff format --check .
 ```
 
-- 1行目はテスト。仮想ディスプレイ (Xvfb) の上でアプリを実際に起動して、入力 → OUTPUT の結果をゴールデンファイル (`tests/golden/`) と比べている
+- 1行目はテスト。イメージにコードをコピーしているので、コードを変えたら `--build` 付きのコマンドから動かす。仮想ディスプレイ (Xvfb) の上でアプリを実際に起動して、入力 → OUTPUT の結果をゴールデンファイル (`tests/golden/`) と比べている
 - GitHub Actions でも push / pull request ごとに同じコマンドを動かしている
 
 ![1](media/GCCS.jpg)

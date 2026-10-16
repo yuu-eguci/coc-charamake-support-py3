@@ -89,6 +89,11 @@ class Driver:
         label = self.find(tk.Label, "\n↑ 出力ファイル名入力欄 ↑\n")
         return label.master.pack_slaves()[0]
 
+    def output_message(self):
+        """OUTPUT ボタンの下に出るメッセージを返します。"""
+        label = self.find(tk.Label, "\n↑ 出力ファイル名入力欄 ↑\n")
+        return label.master.pack_slaves()[3].cget("text")
+
     def press(self, text_prefix):
         for widget in self.widgets():
             if isinstance(widget, tk.Button) and widget.cget("text").startswith(text_prefix):
@@ -98,6 +103,15 @@ class Driver:
 
     def mini_dice_entry(self, column):
         return self.cell(self.find(tk.LabelFrame, "(オマケ)簡易ダイスロール"), 0, column)
+
+    def roll_mini_dice(self, count, sides, bonus):
+        for column, value in zip((0, 2, 4), (count, sides, bonus), strict=True):
+            self.type_into(self.mini_dice_entry(column), value)
+        # キーイベントはフォーカスのある欄に届くので、先にフォーカスを当てます。
+        self.mini_dice_entry(0).focus_force()
+        self.root.update()
+        self.mini_dice_entry(0).event_generate("<Return>")
+        return self.mini_dice_result()
 
     def mini_dice_result(self):
         return self.cell(self.find(tk.LabelFrame, "(オマケ)簡易ダイスロール"), 1, 0).get()
@@ -153,11 +167,16 @@ def gccs(monkeypatch, tmp_path):
     """アプリを起動し、 OUTPUT の出力先を tmp_path にします。"""
     monkeypatch.chdir(tmp_path)
     root = tk.Tk()
+    # ボタンやキー入力から呼ばれた処理の例外は Tk が表示するだけで止まらないので、
+    # 記録しておいてテストを失敗にします。
+    callback_errors = []
+    root.report_callback_exception = lambda *exc_info: callback_errors.append(exc_info[1])
     try:
         app = GCCS(root)
         app.pack()
         root.update()
         yield Driver(root, app)
+        assert callback_errors == []
     finally:
         for after_id in root.after_info():
             root.tk.call("after", "cancel", after_id)
