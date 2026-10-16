@@ -1,10 +1,10 @@
-
 CocCharamakeSupport
 ===
 
-tkinterを使ってるのでpython3専用。CoC TRPG キャラメイク用ツール。
+CoC TRPG のキャラメイク用ツール。 Python 3 の tkinter で作った GUI アプリだよ。
 
-能力値のダイスロール、技能ポイントの振り分けと合計の自動計算、キャラシートのテキスト出力ができる GUI アプリ。
+能力値をダイスで決めて、技能ポイントを振り分けて、キャラシートをテキストに出せる。
+合計の計算はアプリにおまかせ。
 
 - Docker: 対応!
 - Python: 3.15!
@@ -18,9 +18,10 @@ tkinterを使ってるのでpython3専用。CoC TRPG キャラメイク用ツー
 docker compose up --build
 ```
 
-- ログに出る `http://127.0.0.1:6080/vnc.html#autoconnect=true&resize=scale&password=...` をブラウザで開くと、アプリの画面が出る
+- ログに出る `http://127.0.0.1:6080/vnc.html#autoconnect=true&resize=scale&password=...` をブラウザで開くと、そのまま遊べる
     - コンテナの中の仮想ディスプレイ (TigerVNC) にアプリを出して、 noVNC でブラウザに映している
     - ポートは `127.0.0.1` にだけ公開している。 VNC のパスワードは起動ごとにランダムに作る
+    - URL にはパスワードが入るので、ログや URL はほかの人に渡さないでね
 - 日本語は直接は打てない (noVNC が IME に対応していないため)
     - noVNC の左端のメニュー → クリップボードに日本語を貼ってから、アプリの入力欄で `Ctrl+V` すると入る
 - 職業ポイント・興味ポイントを上限より多く振ると、使ったポイントの数字が赤くなる (振ること自体はできる)
@@ -40,7 +41,7 @@ docker compose run --rm dev ruff format --check .
 ```
 
 - 1行目はテスト。イメージにコードをコピーしているので、コードを変えたら `--build` 付きのコマンドから動かす。仮想ディスプレイ (Xvfb) の上でアプリを実際に起動して、入力 → OUTPUT の結果をゴールデンファイル (`tests/golden/`) と比べている
-- GitHub Actions でも master への push と pull request ごとに同じコマンドを動かし、アプリのコンテナが起動して noVNC の画面を返すことも確かめている
+- GitHub Actions でも `master` への push と pull request ごとに同じチェックを回す。アプリのコンテナが起動して noVNC の画面を返すところまで確認する構成だよ
 
 ![1](media/GCCS.jpg)
 
