@@ -9,6 +9,14 @@ CoC TRPG キャラメイク用ツール。
 import tkinter as Tk
 import sys, random, math
 
+class DecimalIntVar(Tk.IntVar):
+    '''"012" のような先頭が 0 の数字も 10 進数として読む IntVar です。
+
+    Tk.IntVar は Tcl の規則で "012" を 8 進数 (10) として読み、 "09" ではエラーになります。
+    '''
+    def get(self):
+        return int(self._tk.globalgetvar(self._name))
+
 class GCCS(Tk.Frame):
     def __init__(self, master = None):
         Tk.Frame.__init__(self, master)
@@ -22,8 +30,8 @@ class GCCS(Tk.Frame):
                 w30, w31, w32, w33, w40, w41, w42, w43) = (Tk.StringVar(), Tk.StringVar(), 
                 Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), 
                 Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), 
-                Tk.StringVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), 
-                Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), 
+                Tk.StringVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), 
+                DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), 
                 Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), 
                 Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), 
                 Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), Tk.StringVar(), 
@@ -365,13 +373,13 @@ class GCCS(Tk.Frame):
         search_frame.grid(row = 0, column = 0, sticky = Tk.E + Tk.W + Tk.N)
         # 探索系技能用の変数
         # 初期値
-        sa1, sa2, sa3, sa4, sa5, sa6, sa7, sa8, sa9, sa10, sa11, sa12 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        sa1, sa2, sa3, sa4, sa5, sa6, sa7, sa8, sa9, sa10, sa11, sa12 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 職業ポイント
-        sb1, sb2, sb3, sb4, sb5, sb6, sb7, sb8, sb9, sb10, sb11, sb12 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        sb1, sb2, sb3, sb4, sb5, sb6, sb7, sb8, sb9, sb10, sb11, sb12 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 興味ポイント
-        sc1, sc2, sc3, sc4, sc5, sc6, sc7, sc8, sc9, sc10, sc11, sc12 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        sc1, sc2, sc3, sc4, sc5, sc6, sc7, sc8, sc9, sc10, sc11, sc12 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 合計
-        sd1, sd2, sd3, sd4, sd5, sd6, sd7, sd8, sd9, sd10, sd11, sd12 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        sd1, sd2, sd3, sd4, sd5, sd6, sd7, sd8, sd9, sd10, sd11, sd12 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 探索系技能の種類
         search_name_list = ('応急手当', '鍵開け', '隠す', '隠れる', '聞き耳', '忍び歩き', '写真術', '精神分析', '追跡', '登攀', '図書館', '目星')
         # まず上の5ラベル
@@ -411,13 +419,13 @@ class GCCS(Tk.Frame):
         battle_frame.grid(row = 1, column = 0, sticky = Tk.E + Tk.W + Tk.N)
         # 戦闘系技能の変数
         # 初期値
-        ba1, ba2, ba3, ba4, ba5, ba6, ba7, ba8, ba9, ba10, ba11, ba12 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        ba1, ba2, ba3, ba4, ba5, ba6, ba7, ba8, ba9, ba10, ba11, ba12 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 職業ポイント
-        bb1, bb2, bb3, bb4, bb5, bb6, bb7, bb8, bb9, bb10, bb11, bb12 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        bb1, bb2, bb3, bb4, bb5, bb6, bb7, bb8, bb9, bb10, bb11, bb12 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 興味ポイント
-        bc1, bc2, bc3, bc4, bc5, bc6, bc7, bc8, bc9, bc10, bc11, bc12 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        bc1, bc2, bc3, bc4, bc5, bc6, bc7, bc8, bc9, bc10, bc11, bc12 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 合計
-        bd1, bd2, bd3, bd4, bd5, bd6, bd7, bd8, bd9, bd10, bd11, bd12 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        bd1, bd2, bd3, bd4, bd5, bd6, bd7, bd8, bd9, bd10, bd11, bd12 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 戦闘系技能の種類
         battle_name_list = ('回避', 'キック', '組付き', 'こぶし(パンチ)', '頭突き', '投擲', 'マーシャルアーツ', '拳銃', 'サブマシンガン', 'ショットガン', 'マシンガン', 'ライフル')
         for foo in range(5):
@@ -456,13 +464,13 @@ class GCCS(Tk.Frame):
         negotiation_frame.grid(row = 0, column = 0, sticky = Tk.E + Tk.W + Tk.N)
         # 交渉系技能の変数
         # 初期値
-        na1, na2, na3, na4, na5, na6, na7 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        na1, na2, na3, na4, na5, na6, na7 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 職業ポイント
-        nb1, nb2, nb3, nb4, nb5, nb6, nb7 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        nb1, nb2, nb3, nb4, nb5, nb6, nb7 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 興味ポイント
-        nc1, nc2, nc3, nc4, nc5, nc6, nc7 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        nc1, nc2, nc3, nc4, nc5, nc6, nc7 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 合計
-        nd1, nd2, nd3, nd4, nd5, nd6, nd7 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        nd1, nd2, nd3, nd4, nd5, nd6, nd7 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 交渉系技能の種類
         negotiation_name_list = ('言いくるめ', '信用', '説得', '値切り', '心理学')
         for foo in range(5):
@@ -509,13 +517,13 @@ class GCCS(Tk.Frame):
         knowledge_frame.grid(row = 1, column = 0, sticky = Tk.E + Tk.W)
         # 知識系技能の変数
         # 初期値
-        ka1, ka2, ka3, ka4, ka5, ka6, ka7, ka8, ka9, ka10, ka11, ka12, ka13, ka14, ka15, ka16, ka17, ka18 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        ka1, ka2, ka3, ka4, ka5, ka6, ka7, ka8, ka9, ka10, ka11, ka12, ka13, ka14, ka15, ka16, ka17, ka18 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 職業ポイント
-        kb1, kb2, kb3, kb4, kb5, kb6, kb7, kb8, kb9, kb10, kb11, kb12, kb13, kb14, kb15, kb16, kb17, kb18 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        kb1, kb2, kb3, kb4, kb5, kb6, kb7, kb8, kb9, kb10, kb11, kb12, kb13, kb14, kb15, kb16, kb17, kb18 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 興味ポイント
-        kc1, kc2, kc3, kc4, kc5, kc6, kc7, kc8, kc9, kc10, kc11, kc12, kc13, kc14, kc15, kc16, kc17, kc18 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        kc1, kc2, kc3, kc4, kc5, kc6, kc7, kc8, kc9, kc10, kc11, kc12, kc13, kc14, kc15, kc16, kc17, kc18 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 合計
-        kd1, kd2, kd3, kd4, kd5, kd6, kd7, kd8, kd9, kd10, kd11, kd12, kd13, kd14, kd15, kd16, kd17, kd18 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        kd1, kd2, kd3, kd4, kd5, kd6, kd7, kd8, kd9, kd10, kd11, kd12, kd13, kd14, kd15, kd16, kd17, kd18 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 知識系技能の種類
         knowledge_name_list = ('医学', 'オカルト', '科学', 'クトゥルフ神話', '経理', '考古学', 'コンピュータ', '人類学', '生物学', '地質学', '電子工学', '天文学', '博物学', '物理学', '法律', '薬学', '歴史')
         for foo in range(5):
@@ -559,13 +567,13 @@ class GCCS(Tk.Frame):
         action_frame.grid(row = 0, column = 0, sticky = Tk.E + Tk.W + Tk.N)
         # 行動系技能の変数
         # 初期値
-        aa1, aa2, aa3, aa4, aa5, aa6, aa7, aa8, aa9, aa10, aa11 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        aa1, aa2, aa3, aa4, aa5, aa6, aa7, aa8, aa9, aa10, aa11 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 職業ポイント
-        ab1, ab2, ab3, ab4, ab5, ab6, ab7, ab8, ab9, ab10, ab11 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        ab1, ab2, ab3, ab4, ab5, ab6, ab7, ab8, ab9, ab10, ab11 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 興味ポイント
-        ac1, ac2, ac3, ac4, ac5, ac6, ac7, ac8, ac9, ac10, ac11 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        ac1, ac2, ac3, ac4, ac5, ac6, ac7, ac8, ac9, ac10, ac11 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 合計
-        ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9, ad10, ad11 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9, ad10, ad11 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 行動系技能の種類
         action_name_list = ('運転', '機械修理', '重機械操作', '乗馬', '水泳', '跳躍', '電気修理', 'ナビゲート', '変装')
         for foo in range(5):
@@ -612,13 +620,13 @@ class GCCS(Tk.Frame):
         option_frame.grid(row = 1, column = 0, sticky = Tk.E + Tk.W)
         # 任意の変数
         # 初期値
-        oa1, oa2, oa3 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        oa1, oa2, oa3 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 職業ポイント
-        ob1, ob2, ob3 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        ob1, ob2, ob3 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 興味ポイント
-        oc1, oc2, oc3 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        oc1, oc2, oc3 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 合計
-        od1, od2, od3 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar()
+        od1, od2, od3 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar()
         # 任意の技能の種類
         for foo in range(5):
             option_5labels = Tk.Label(option_frame, text = ability_label_list[foo])
@@ -654,7 +662,7 @@ class GCCS(Tk.Frame):
         # 常時 .get() .set() を繰り返す方法を考えるのに疲れたので気晴らしにダイスロールエリアを作る
         dice_roll_frame = Tk.LabelFrame(frame_for_action_option, text = u'(オマケ)簡易ダイスロール', relief = 'ridge', borderwidth = 2)
         dice_roll_frame.grid(row = 2, column = 0, pady = 50)
-        dice_roll1, dice_roll2, dice_roll3, dice_roll4 = Tk.IntVar(), Tk.IntVar(), Tk.IntVar(), Tk.StringVar()
+        dice_roll1, dice_roll2, dice_roll3, dice_roll4 = DecimalIntVar(), DecimalIntVar(), DecimalIntVar(), Tk.StringVar()
         dice_roll_entry1 = Tk.Entry(dice_roll_frame, textvariable = dice_roll1, width = 5)
         dice_roll_entry1.grid(row = 0, column = 0, pady = 5)
         dice_roll_label1 = Tk.Label(dice_roll_frame, text = 'D')

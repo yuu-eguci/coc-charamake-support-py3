@@ -46,3 +46,12 @@ def test_recalculation_continues_after_entry_is_blanked(gccs):
     gccs.type_into(gccs.skill_cell("探索系技能", 2, 2), "40")
     gccs.pump()
     assert gccs.skill_total("探索系技能", 2) == "41"
+
+
+def test_numbers_with_leading_zero_are_decimal(gccs):
+    # 初期値の "0" の後ろに続けて打つと "012" のようになります。
+    gccs.type_into(gccs.skill_cell("探索系技能", 1, 2), "012")
+    gccs.type_into(gccs.status_entry("DEX"), "09")
+    gccs.pump()
+    assert gccs.skill_total("探索系技能", 1) == "42"
+    assert gccs.skill_total("戦闘系技能", 1) == "18"
