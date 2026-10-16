@@ -40,7 +40,7 @@ docker compose run --rm dev ruff format --check .
 ```
 
 - 1行目はテスト。イメージにコードをコピーしているので、コードを変えたら `--build` 付きのコマンドから動かす。仮想ディスプレイ (Xvfb) の上でアプリを実際に起動して、入力 → OUTPUT の結果をゴールデンファイル (`tests/golden/`) と比べている
-- GitHub Actions でも push / pull request ごとに同じコマンドを動かしている
+- GitHub Actions でも master への push と pull request ごとに同じコマンドを動かし、アプリのコンテナが起動して noVNC の画面を返すことも確かめている
 
 ![1](media/GCCS.jpg)
 

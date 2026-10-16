@@ -23,3 +23,14 @@ jobs:
           docker compose run --rm dev ruff format --check .
       - name: Test
         run: docker compose run --rm dev
+      - name: Smoke test
+        run: |
+          docker compose up -d app
+          for _ in $(seq 1 30); do
+            curl -sf -o /dev/null http://127.0.0.1:6080/vnc.html && break
+            sleep 1
+          done
+          curl -sf -o /dev/null http://127.0.0.1:6080/vnc.html
+          test -n "$(docker compose ps --status running -q app)"
+          docker compose logs app
+          docker compose down
