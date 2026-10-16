@@ -331,9 +331,12 @@ class GCCS(tk.Frame):
         point_frame = tk.Frame(main_frame)
         point_frame.grid(row=3, column=1, sticky=tk.W)
         texts = (" 職業ポイント:", "/", "興味ポイント:", "/")
-        for i, (text, variable) in enumerate(zip(texts, self.points.values(), strict=True)):
+        self.point_labels = {}
+        for i, (text, (name, variable)) in enumerate(zip(texts, self.points.items(), strict=True)):
             tk.Label(point_frame, text=text).grid(row=0, column=i * 2)
-            tk.Label(point_frame, textvariable=variable).grid(row=0, column=i * 2 + 1)
+            self.point_labels[name] = tk.Label(point_frame, textvariable=variable)
+            self.point_labels[name].grid(row=0, column=i * 2 + 1)
+        self.normal_fg = self.point_labels["職業P合計"].cget("fg")
 
     def build_skills(self, main_frame):
         """技能表と簡易ダイスロールを作ります。"""
@@ -410,12 +413,21 @@ class GCCS(tk.Frame):
         self.derived["アイデア"].set(int_ * 5)
         self.derived["幸運"].set(pow_ * 5)
         self.derived["知識"].set(edu * 5)
-        self.points["職業P上限"].set(edu * 20)
-        self.points["興味P上限"].set(int_ * 10)
+        occupation_limit, interest_limit = edu * 20, int_ * 10
+        self.points["職業P上限"].set(occupation_limit)
+        self.points["興味P上限"].set(interest_limit)
         self.db.set(damage_bonus(self.status["STR"].get(), siz))
         rows = [row for category in self.skills.values() for row in category]
-        self.points["職業P合計"].set(sum(row.occupation.get() for row in rows))
-        self.points["興味P合計"].set(sum(row.interest.get() for row in rows))
+        occupation_used = sum(row.occupation.get() for row in rows)
+        interest_used = sum(row.interest.get() for row in rows)
+        self.points["職業P合計"].set(occupation_used)
+        self.points["興味P合計"].set(interest_used)
+        # 上限より多く振ったときは赤くして知らせます (振ること自体は止めません)。
+        for name, over in (
+            ("職業P合計", occupation_used > occupation_limit),
+            ("興味P合計", interest_used > interest_limit),
+        ):
+            self.point_labels[name].config(fg="red" if over else self.normal_fg)
         self.dodge.initial.set(dex * 2)
         self.native_language.initial.set(edu * 5)
         for row in rows:
@@ -480,7 +492,7 @@ class GCCS(tk.Frame):
         self.show_output_message(f"{shown}.txt に書き出したよ")
 
     def show_output_message(self, text, error=False):
-        self.output_message.config(text=text, fg="red" if error else "black")
+        self.output_message.config(text=text, fg="red" if error else self.normal_fg)
 
 
 if __name__ == "__main__":

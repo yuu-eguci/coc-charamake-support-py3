@@ -78,6 +78,11 @@ class Driver:
         label = self.find(tk.Label, "名称")
         return self.cell(label.master, row, column)
 
+    def point_used_label(self, name):
+        """職業ポイント・興味ポイントの「使った量」のラベルを返します。"""
+        label = self.find(tk.Label, name)
+        return self.cell(label.master, 0, label.grid_info()["column"] + 1)
+
     def skill_cell(self, category, row, column):
         """技能表のセルを返します。 column は 0: 技能名, 2: 職業P, 3: 興味P, 4: 合計 です。"""
         return self.cell(self.find(tk.LabelFrame, category), row, column)

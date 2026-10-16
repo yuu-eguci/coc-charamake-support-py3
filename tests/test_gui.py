@@ -148,3 +148,16 @@ def test_long_file_name_message_does_not_widen_the_window(gccs, tmp_path):
     assert (tmp_path / ("x" * 200 + ".txt")).exists()
     assert gccs.output_message() == "x" * 23 + "….txt に書き出したよ"
     assert left.winfo_reqwidth() == width
+
+
+def test_overspent_points_turn_red(gccs):
+    used = gccs.point_used_label(" 職業ポイント:")
+    normal = used.cget("fg")
+    gccs.type_into(gccs.status_entry("EDU"), "1")
+    gccs.type_into(gccs.skill_cell("探索系技能", 1, 2), "21")
+    gccs.pump()
+    assert used.cget("fg") == "red"
+    assert gccs.point_used_label("興味ポイント:").cget("fg") == normal
+    gccs.type_into(gccs.skill_cell("探索系技能", 1, 2), "20")
+    gccs.pump()
+    assert used.cget("fg") == normal
