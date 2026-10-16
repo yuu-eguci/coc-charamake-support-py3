@@ -55,3 +55,15 @@ def test_numbers_with_leading_zero_are_decimal(gccs):
     gccs.pump()
     assert gccs.skill_total("探索系技能", 1) == "42"
     assert gccs.skill_total("戦闘系技能", 1) == "18"
+
+
+def test_tab_moves_down_the_occupation_column(gccs):
+    entry = gccs.skill_cell("探索系技能", 1, 2)
+    assert entry.tk_focusNext() is gccs.skill_cell("探索系技能", 2, 2)
+
+
+def test_invalid_app_does_not_stop_recalculation(gccs):
+    gccs.type_into(gccs.status_entry("APP"), "")
+    gccs.type_into(gccs.skill_cell("探索系技能", 2, 2), "40")
+    gccs.pump()
+    assert gccs.skill_total("探索系技能", 2) == "41"
