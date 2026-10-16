@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      target: app
+    init: true
+    # Linux で uid が 1000 以外のときは APP_UID=$(id -u) APP_GID=$(id -g) を付けて起動すると ./output に書き込めます。
+    user: "${APP_UID:-1000}:${APP_GID:-1000}"
+    ports:
+      - "127.0.0.1:6080:6080"
+    volumes:
+      - ./output:/data
+
+  dev:
+    build:
+      context: .
+      target: dev
+    init: true
+    profiles: ["dev"]

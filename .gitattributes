@@ -1,0 +1,3 @@
+*.sh text eol=lf
+# 出力のゴールデンファイルは行末の空白も比較するので、空白の自動修正をしません。
+tests/golden/** -whitespace
