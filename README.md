@@ -8,6 +8,7 @@ tkinterを使ってるのでpython3専用。CoC TRPG キャラメイク用ツー
 
 - Docker: 対応!
 - Python: 3.15!
+- Linter: Ruff 0.17!
 - Test: pytest 9.1!
 - GUI: tkinter (Tk 8.6)!
 
@@ -27,13 +28,16 @@ docker compose up --build
     - Linux で uid が 1000 以外なら `APP_UID=$(id -u) APP_GID=$(id -g) docker compose up --build` で起動すると書き込める
 - 止めるときは `Ctrl+C` (または `docker compose down`)
 
-## テスト
+## テストと lint
 
 ```bash
 docker compose run --rm --build dev
+docker compose run --rm dev ruff check .
+docker compose run --rm dev ruff format --check .
 ```
 
-- 仮想ディスプレイ (Xvfb) の上でアプリを実際に起動して、入力 → OUTPUT の結果をゴールデンファイル (`tests/golden/`) と比べている
+- 1行目はテスト。仮想ディスプレイ (Xvfb) の上でアプリを実際に起動して、入力 → OUTPUT の結果をゴールデンファイル (`tests/golden/`) と比べている
+- GitHub Actions でも push / pull request ごとに同じコマンドを動かしている
 
 ![1](media/GCCS.jpg)
 

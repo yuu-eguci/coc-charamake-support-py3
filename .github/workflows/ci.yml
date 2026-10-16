@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Build
+        run: docker compose build app dev
+      - name: Lint
+        run: |
+          docker compose run --rm dev ruff check .
+          docker compose run --rm dev ruff format --check .
+      - name: Test
+        run: docker compose run --rm dev
