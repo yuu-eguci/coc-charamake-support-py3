@@ -718,8 +718,9 @@ class GCCS(Tk.Frame):
         def entry_check():
             try:
                 reload()
-            except ValueError:
-                print('type:' + str(type(e)))
+            except (Tk.TclError, ValueError, OverflowError):
+                # 入力途中で欄が空や数字以外のときは、次の周期で計算し直します。
+                pass
             self.after(500, entry_check)
         entry_check()
 

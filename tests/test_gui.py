@@ -38,3 +38,11 @@ def test_output_matches_golden(gccs, tmp_path):
     written = (tmp_path / "midorikawa.txt").read_text(encoding="utf-8")
     assert written == GOLDEN.read_text(encoding="utf-8")
 
+
+def test_recalculation_continues_after_entry_is_blanked(gccs):
+    gccs.type_into(gccs.status_entry("STR"), "")
+    gccs.pump()
+    gccs.type_into(gccs.status_entry("STR"), "9")
+    gccs.type_into(gccs.skill_cell("探索系技能", 2, 2), "40")
+    gccs.pump()
+    assert gccs.skill_total("探索系技能", 2) == "41"
